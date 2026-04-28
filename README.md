@@ -48,10 +48,6 @@ aws lambda add-permission --function-name CBFunction --statement-id apigateway-i
 python3 uploadmembers.py
 
 
-TWILIO setup before
+TWILIO webhook URL
 
-https://b9p8ybxhj7.execute-api.us-east-1.amazonaws.com/default/incomingtext?auth=XYZ
-
-now
-
-https://cb.labsbell.com/default/incomingtext?auth=XYZ&cb=7
+https://internal.mcb7.org/incomingtext?auth=<TWILIO_API_KEY>&cb=<community_board_number>

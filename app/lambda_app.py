@@ -14,7 +14,7 @@ def json_response(body, status=200):
     return {
         'statusCode': status,
         'headers': {'Content-Type': 'application/json'},
-        'body': body if isinstance(body, str) else json.dumps(body),
+        'body': json.dumps(body),
     }
 
 def lambda_handler(event, context):
