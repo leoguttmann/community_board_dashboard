@@ -12,7 +12,7 @@ import concurrent.futures
 API_KEY = os.environ.get('API_KEY')
 
 # Update with your Lambda URL and Twilio API key
-LAMBDA_URL = "https://jrkve800qh.execute-api.us-east-1.amazonaws.com/default/manualentry"
+LAMBDA_URL = "https://b9p8ybxhj7.execute-api.us-east-1.amazonaws.com/default/manualentry"
 #LAMBDA_URL = "http://127.0.0.1:5000/manualentry"
 persister = PersisterGlobalVariables()
 persister.load_members()

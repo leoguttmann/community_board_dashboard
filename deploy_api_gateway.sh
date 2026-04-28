@@ -15,7 +15,7 @@ API_ID=$(aws apigatewayv2 create-api \
   --region $REGION \
   --name $API_NAME \
   --protocol-type HTTP \
-  --cors-configuration AllowOrigins="*",AllowMethods="GET,POST,OPTIONS",AllowHeaders="Content-Type,X-Api-Key,X-Community-Board" \
+  --cors-configuration 'AllowOrigins=*,AllowMethods=GET POST OPTIONS,AllowHeaders=Content-Type x-api-key x-community-board' \
   --query 'ApiId' \
   --output text)
 echo "API ID: $API_ID"

@@ -50,7 +50,7 @@ python3 uploadmembers.py
 
 TWILIO setup before
 
-https://jrkve800qh.execute-api.us-east-1.amazonaws.com/default/incomingtext?auth=XYZ
+https://b9p8ybxhj7.execute-api.us-east-1.amazonaws.com/default/incomingtext?auth=XYZ
 
 now
 
