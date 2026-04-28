@@ -24,7 +24,7 @@ def lambda_handler(event, context):
     if path.startswith('/default/'):
         path = path[len('/default'):]
 
-    if path == '/webresults':
+    if path in ('/', '/webresults'):
         return get_html_page()
 
     if path == '/incomingtext' and 'auth=' + TWILIO_API_KEY in event['rawQueryString']:
