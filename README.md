@@ -1,53 +1,99 @@
-TODO
+# Community Board Dashboard
 
-* Cb cors issue
+## Run locally
 
-# Run it all local
-
-change the persister to Global Variable and the Logger
+```bash
 export FLASK_APP=flask_app.py
-export API_KEY=auth-key-value
-cd /app
+export API_KEY=<your-api-key>
+cd app
 flask run --reload
-http://127.0.0.1:5000/webresults
+```
 
+Then open http://127.0.0.1:5000/webresults
 
+---
 
-# deploy hosted
-sh deploy_lambda.sh 
+## AWS Infrastructure
 
+### Overview
 
-# AWS Setup
+- **Lambda**: `CBFunction` — Python 3.8, handles all API routes
+- **Lambda layer**: `cb-dashboard-dependencies` — third-party packages (twilio, flask, etc.)
+- **API Gateway**: HTTP API (v2), catch-all `$default` route → Lambda, stage named `default`
+- **Custom domain**: `internal.mcb7.org` → API Gateway, certificate managed in ACM
+- **DNS**: Route 53, ALIAS record for `internal.mcb7.org`
 
-API Gateway - setup endpoints
-Lambda - create with the attached script, comment out the create
+### Lambda environment variables
 
+| Variable | Description |
+|---|---|
+| `API_KEY` | Shared secret checked via `x-api-key` header on all authenticated endpoints |
+| `TWILIO_API_KEY` | Shared secret embedded in the Twilio webhook URL (`auth=` param) |
 
-# create the twilio_layer
-mkdir python
-cd python
-vim requirements.txt add urllib3<2 and twilio
-pip3 install -r requirements.txt -t ./
-zip -r python.zip . (STOP, there must be a python/ when you first unzip so nest another python folder or change zip)
-In the AWS Lambda console, navigate to the "Layers" section. Click the "Create layer" button, and then:
+### Deployment scripts
 
-Enter a name for your layer.
-Provide a description (optional).
-Upload the python.zip file.
-Choose a compatible runtime (e.g., Python 3.8 or the runtime you intend to use).
-Click "Create" to create the Lambda layer.
+| Script | Purpose |
+|---|---|
+| `./deploy_lambda.sh` | Update Lambda function code (default) |
+| `./deploy_lambda.sh --new` | Create Lambda function for the first time |
+| `./deploy_layer.sh` | Build and publish the dependency layer, attach it to CBFunction |
+| `./deploy_api_gateway.sh` | Create the HTTP API Gateway (first-time setup) |
+| `./deploy_custom_domain.sh` | Request ACM cert, create custom domain, wire up Route 53 (first-time setup) |
 
-# Lambda permissions
-aws lambda add-permission --function-name CBFunction --statement-id apigateway-invoke-permissions --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn "arn:aws:execute-api:us-east-1:accound:lambda/default/GET/test"
+### First-time setup order
 
-# AUTH
-* For twilio, a parameter is added to the url string in twilio config
-* For lambda and local flask, environment variable is being checked vs x-api-key
+1. `./deploy_lambda.sh --new`
+2. `./deploy_layer.sh`
+3. `./deploy_api_gateway.sh`
+4. `./deploy_custom_domain.sh`
+5. Set environment variables on the Lambda:
+   ```bash
+   aws lambda update-function-configuration \
+     --profile mcb7 \
+     --region us-east-1 \
+     --function-name CBFunction \
+     --environment "Variables={API_KEY=<value>,TWILIO_API_KEY=<value>}"
+   ```
 
-# python scrip to upload members.csv to s3 as members.json
-python3 uploadmembers.py
+---
 
+## API endpoints
 
-TWILIO webhook URL
+All endpoints are available at `https://internal.mcb7.org/`.
 
+Authenticated endpoints require headers:
+- `x-api-key: <API_KEY>`
+- `x-community-board: <board_number>`
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/` | No | Serve the dashboard HTML page |
+| GET | `/members` | Yes | Get member list |
+| POST | `/members` | Yes | Set member list |
+| POST | `/startvoting` | Yes | Start a vote |
+| POST | `/stopvoting` | Yes | Stop a vote |
+| GET | `/results` | Yes | Get current vote results |
+| GET | `/isvotingstarted` | Yes | Check if voting is active |
+| POST | `/exportvotes` | Yes | Export votes for a date |
+| POST | `/manualentry` | Yes | Manually submit a vote |
+| POST | `/incomingtext` | URL param | Twilio SMS webhook |
+
+---
+
+## Twilio
+
+Webhook URL to configure in the Twilio console:
+
+```
 https://internal.mcb7.org/incomingtext?auth=<TWILIO_API_KEY>&cb=<community_board_number>
+```
+
+The `auth` param must match the `TWILIO_API_KEY` environment variable on the Lambda.
+
+---
+
+## Upload members
+
+```bash
+python3 uploadmembers.py
+```
