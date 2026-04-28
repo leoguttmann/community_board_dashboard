@@ -18,7 +18,7 @@ mkdir ~/Downloads/tonightsvotes/raw/
 mkdir ~/Downloads/tonightsvotes/summary/
 
 
-aws s3 cp s3://cb-dashboard-data-store/summaryvotelog/ ~/Downloads/tonightsvotes/summary/  --recursive --exclude "*" --include "${today}*" --include "${yesterday}*" --include "${twodaysago}*"
-aws s3 cp s3://cb-dashboard-data-store/rawvotelog/ ~/Downloads/tonightsvotes/raw/ --recursive --exclude "*" --include "${today}*" --include "${yesterday}*" --include "${twodaysago}*"
+aws s3 cp s3://cb7-dashboard-data-store/summaryvotelog/ ~/Downloads/tonightsvotes/summary/  --recursive --exclude "*" --include "${today}*" --include "${yesterday}*" --include "${twodaysago}*"
+aws s3 cp s3://cb7-dashboard-data-store/rawvotelog/ ~/Downloads/tonightsvotes/raw/ --recursive --exclude "*" --include "${today}*" --include "${yesterday}*" --include "${twodaysago}*"
 cat ~/Downloads/tonightsvotes/summary/*.txt > ~/Downloads/tonightsvotes/combined_output.txt
 zip -r ~/Downloads/tonightsvotes.zip ~/Downloads/tonightsvotes/
