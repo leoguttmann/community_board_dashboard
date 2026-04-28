@@ -1,4 +1,7 @@
 twilio
-flask 
+flask
+flask-cors
+boto3
 pyngrok
 urllib3<2
+pytz

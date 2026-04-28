@@ -89,7 +89,7 @@ class PersisterS3(Persister, PersisterBase):
         super().__init__()
         self.s3_resource = boto3.resource('s3')
         self.s3 =  boto3.client('s3')
-        self.bucket_name = 'cb-dashboard-data-store'
+        self.bucket_name = 'cb7-dashboard-data-store'
         self.vote_log_key = 'vote_log.json'
         self.current_vote_name_key = 'current_vote_name.json'
         self.currently_in_a_voting_session_key = 'currently_in_a_voting_session.json'
