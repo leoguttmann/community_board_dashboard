@@ -21,11 +21,13 @@ def lambda_handler(event, context):
     print(str(event))
     http_method = event['requestContext']['http']['method']
     path = event['rawPath']
+    if path.startswith('/default/'):
+        path = path[len('/default'):]
 
-    if path == '/default/webresults':
+    if path == '/webresults':
         return get_html_page()
 
-    if path == '/default/incomingtext' and 'auth=' + TWILIO_API_KEY in event['rawQueryString']:
+    if path == '/incomingtext' and 'auth=' + TWILIO_API_KEY in event['rawQueryString']:
         body = event['body']
         decoded_body = base64.b64decode(body).decode('utf-8')
         query_params = parse_qs(decoded_body)
@@ -42,7 +44,7 @@ def lambda_handler(event, context):
     if 'headers' in event and 'x-api-key' in event['headers'] and event['headers']['x-api-key'] == API_KEY:
         community_board = event['headers']['x-community-board']
         if http_method == 'POST':
-            if path == '/default/startvoting':
+            if path == '/startvoting':
                 if true_if_members_list_zero(community_board):
                     return json_response({'error': 'Internal Server Error', 'message': 'Member list is zero'}, 500)
                 body = event['body']
@@ -54,28 +56,28 @@ def lambda_handler(event, context):
                     return json_response({'error': 'Bad Request', 'message': 'Candidates are required for ELECTION vote_type'}, 400)
                 api_start_voting(title=title, community_board=community_board, vote_type=vote_type, candidates=candidates)
                 return json_response('OK')
-            elif path == '/default/exportvotes':
+            elif path == '/exportvotes':
                 body = json.loads(event['body'])
                 date = body.get('date')
                 return api_export_votes(date, community_board)
-            elif path == '/default/manualentry':
+            elif path == '/manualentry':
                 body = event['body']
                 data = json.loads(body)
                 number_sms = data['number_sms']
                 vote_to_send = data['vote_to_send']
                 return api_testing(number_sms, vote_to_send, community_board)
-            elif path == '/default/stopvoting':
+            elif path == '/stopvoting':
                 api_stop_voting(community_board)
                 return json_response('OK')
-            elif path == '/default/members':
+            elif path == '/members':
                 body = json.loads(event['body']) if event.get('body') else {}
                 return api_set_members(body, community_board)
         elif http_method == 'GET':
-            if path == '/default/results':
+            if path == '/results':
                 return api_get_results(community_board)
-            elif path == '/default/isvotingstarted':
+            elif path == '/isvotingstarted':
                 return json_response(api_is_voting_started(community_board))
-            elif path == '/default/members':
+            elif path == '/members':
                 return json_response(api_get_members(community_board))
         else:
             return json_response('Method not allowed', 405)
