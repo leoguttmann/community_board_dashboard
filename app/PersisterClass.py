@@ -138,7 +138,11 @@ class PersisterS3(Persister, PersisterBase):
             object_key = obj['Key']
 
             # Fetch the object's data
-            response = self.s3.get_object(Bucket=self.bucket_name, Key=object_key)
+            try:
+                response = self.s3.get_object(Bucket=self.bucket_name, Key=object_key)
+            except self.s3.exceptions.NoSuchKey:
+                print(f"[get_vote_log] key disappeared (race condition), skipping: {object_key}")
+                continue
             object_data = response['Body'].read().decode('utf-8')
             # Load the object data as JSON
             try:
