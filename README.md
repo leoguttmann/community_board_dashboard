@@ -97,3 +97,29 @@ The `auth` param must match the `TWILIO_API_KEY` environment variable on the Lam
 ```bash
 python3 uploadmembers.py
 ```
+
+---
+
+## Testing concurrent votes
+
+`test_concurrent_votes.sh` sends votes from multiple phone numbers simultaneously to exercise the `/incomingtext` endpoint under load.
+
+Phone numbers are read from a local `test_numbers.txt` file (one number per line) that is gitignored to keep member data out of the repo.
+
+```
++12125551234
++12125555678
+...
+```
+
+Run the test:
+
+```bash
+./test_concurrent_votes.sh
+```
+
+Or pass a custom numbers file:
+
+```bash
+./test_concurrent_votes.sh path/to/other_numbers.txt
+```
