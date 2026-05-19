@@ -273,7 +273,7 @@ class PersisterS3(Persister, PersisterBase):
                 Prefix=prefix
             )
             if 'Contents' in response:
-                return [obj['Key'] for obj in response['Contents']]
+                return [obj['Key'] for obj in sorted(response['Contents'], key=lambda obj: obj['LastModified'])]
             return []
         except Exception as e:
             print(f"Error listing objects: {str(e)}")
