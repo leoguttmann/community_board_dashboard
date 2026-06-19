@@ -50,7 +50,7 @@ class LocalVoteLoggingClass(VoteLoggingClass):
 class S3VoteLoggingClass(VoteLoggingClass):
     def __init__(self):
         self.s3_resource = boto3.resource('s3')
-        self.bucket_name = 'cb7-dashboard-data-store'
+        self.bucket_name = 'qcb2-dashboard-data-store'
         self.vote_summary_folder = 'summaryvotelog/'
         self.vote_raw_folder = 'rawvotelog/'
 

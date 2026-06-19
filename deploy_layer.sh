@@ -5,7 +5,7 @@
 
 set -e
 
-PROFILE="mcb7"
+PROFILE="qcb2"
 REGION="us-east-1"
 FUNCTION_NAME="CBFunction"
 LAYER_NAME="cb-dashboard-dependencies"
@@ -17,7 +17,7 @@ rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR/python
 
 grep -v -E '^(boto3|pyngrok)' app/requirements.txt > /tmp/layer-requirements.txt
-pip install -r /tmp/layer-requirements.txt --target $BUILD_DIR/python --quiet
+pip3 install -r /tmp/layer-requirements.txt --target $BUILD_DIR/python --quiet
 
 echo "Zipping layer..."
 (cd $BUILD_DIR && zip -r ../$ZIP_FILE python) > /dev/null

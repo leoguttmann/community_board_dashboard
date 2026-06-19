@@ -1,15 +1,15 @@
 #!/bin/bash
 # Usage: ./deploy_custom_domain.sh
-#   Sets up internal.mcb7.org as a custom domain for the API Gateway.
-#   Requires the Route 53 hosted zone for mcb7.org to be in the same AWS account.
+#   Sets up a custom domain for the API Gateway.
+#   Requires the Route 53 hosted zone to be in the same AWS account.
 
 set -e
 
-PROFILE="mcb7"
+PROFILE="qcb2"
 REGION="us-east-1"
-DOMAIN="internal.mcb7.org"
-HOSTED_ZONE_DOMAIN="mcb7.org"
-API_ID="b9p8ybxhj7"
+DOMAIN="internal.qcb2.example.com"
+HOSTED_ZONE_DOMAIN="qcb2.example.com"
+API_ID="7fklhw9ka7"
 STAGE="default"
 
 # Step 1: Request ACM certificate
@@ -53,7 +53,7 @@ if [ -z "$VALIDATION_NAME" ] || [ "$VALIDATION_NAME" = "None" ]; then
 fi
 echo "Validation record: $VALIDATION_NAME -> $VALIDATION_VALUE"
 
-# Step 3: Look up the hosted zone ID for mcb7.org
+# Step 3: Look up the hosted zone ID
 echo "Looking up Route 53 hosted zone for $HOSTED_ZONE_DOMAIN..."
 HOSTED_ZONE_ID=$(aws route53 list-hosted-zones-by-name \
   --profile $PROFILE \
@@ -119,7 +119,7 @@ aws apigatewayv2 create-api-mapping \
   --api-id $API_ID \
   --stage $STAGE > /dev/null
 
-# Step 8: Create Route 53 ALIAS record pointing internal.mcb7.org at API Gateway
+# Step 8: Create Route 53 ALIAS record pointing custom domain at API Gateway
 echo "Creating Route 53 ALIAS record for $DOMAIN..."
 aws route53 change-resource-record-sets \
   --profile $PROFILE \

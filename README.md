@@ -20,8 +20,8 @@ Then open http://127.0.0.1:5000/webresults
 - **Lambda**: `CBFunction` — Python 3.8, handles all API routes
 - **Lambda layer**: `cb-dashboard-dependencies` — third-party packages (twilio, flask, etc.)
 - **API Gateway**: HTTP API (v2), catch-all `$default` route → Lambda, stage named `default`
-- **Custom domain**: `internal.mcb7.org` → API Gateway, certificate managed in ACM
-- **DNS**: Route 53, ALIAS record for `internal.mcb7.org`
+- **API Gateway URL**: `https://7fklhw9ka7.execute-api.us-east-1.amazonaws.com/default`
+- **Custom domain** (not yet configured): `deploy_custom_domain.sh` sets up a custom domain with ACM cert and Route 53 DNS
 
 ### Lambda environment variables
 
@@ -49,17 +49,25 @@ Then open http://127.0.0.1:5000/webresults
 5. Set environment variables on the Lambda:
    ```bash
    aws lambda update-function-configuration \
-     --profile mcb7 \
+     --profile qcb2 \
      --region us-east-1 \
      --function-name CBFunction \
      --environment "Variables={API_KEY=<value>,TWILIO_API_KEY=<value>}"
+   ```
+6. Retrieve environment variables (e.g., to get the dashboard password):
+   ```bash
+   aws lambda get-function-configuration \
+     --profile qcb2 \
+     --region us-east-1 \
+     --function-name CBFunction \
+     --query 'Environment.Variables'
    ```
 
 ---
 
 ## API endpoints
 
-All endpoints are available at `https://internal.mcb7.org/`.
+All endpoints are available at `https://7fklhw9ka7.execute-api.us-east-1.amazonaws.com/default/`.
 
 Authenticated endpoints require headers:
 - `x-api-key: <API_KEY>`
@@ -85,7 +93,7 @@ Authenticated endpoints require headers:
 Webhook URL to configure in the Twilio console:
 
 ```
-https://internal.mcb7.org/incomingtext?auth=<TWILIO_API_KEY>&cb=<community_board_number>
+https://7fklhw9ka7.execute-api.us-east-1.amazonaws.com/default/incomingtext?auth=<TWILIO_API_KEY>&cb=<community_board_number>
 ```
 
 The `auth` param must match the `TWILIO_API_KEY` environment variable on the Lambda.

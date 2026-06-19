@@ -21,17 +21,17 @@ done
 if [ "$NEW" = true ]; then
   echo "Creating new Lambda function..."
   aws lambda create-function \
-    --profile mcb7 \
+    --profile qcb2 \
     --region us-east-1 \
     --function-name $FUNCTION_NAME \
     --runtime python3.8 \
-    --role arn:aws:iam::239460480281:role/cb-dashboard-data-store-lambda-role \
+    --role arn:aws:iam::487037338725:role/qcb2-dashboard-lambda-role \
     --handler $HANDLER \
     --zip-file fileb://app/$ZIP_FILE_PATH
 else
   echo "Updating Lambda function code..."
   aws lambda update-function-code \
-    --profile mcb7 \
+    --profile qcb2 \
     --region us-east-1 \
     --function-name $FUNCTION_NAME \
     --zip-file fileb://app/$ZIP_FILE_PATH

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TWILIO_API_KEY="cb7twilio"
-URL="https://internal.mcb7.org/incomingtext?auth=${TWILIO_API_KEY}&cb=7"
+TWILIO_API_KEY="YOUR_TWILIO_API_KEY"
+URL="https://internal.qcb2.example.com/incomingtext?auth=${TWILIO_API_KEY}&cb=2"
 
 NUMBERS_FILE="${1:-test_numbers.txt}"
 
