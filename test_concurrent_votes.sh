@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TWILIO_API_KEY="YOUR_TWILIO_API_KEY"
-URL="https://internal.qcb2.example.com/incomingtext?auth=${TWILIO_API_KEY}&cb=2"
+TWILIO_API_KEY="${TWILIO_API_KEY:?Set TWILIO_API_KEY env var before running}"
+URL="https://7fklhw9ka7.execute-api.us-east-1.amazonaws.com/default/incomingtext?auth=${TWILIO_API_KEY}&cb=2"
 
 NUMBERS_FILE="${1:-test_numbers.txt}"
 

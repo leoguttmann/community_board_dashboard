@@ -2,13 +2,14 @@
 # Usage: ./deploy_custom_domain.sh
 #   Sets up a custom domain for the API Gateway.
 #   Requires the Route 53 hosted zone to be in the same AWS account.
+#   Before running: update DOMAIN and HOSTED_ZONE_DOMAIN with your actual domain.
 
 set -e
 
 PROFILE="qcb2"
 REGION="us-east-1"
-DOMAIN="internal.qcb2.example.com"
-HOSTED_ZONE_DOMAIN="qcb2.example.com"
+DOMAIN="internal.qcb2.example.com"       # TODO: replace with actual domain
+HOSTED_ZONE_DOMAIN="qcb2.example.com"    # TODO: replace with actual domain
 API_ID="7fklhw9ka7"
 STAGE="default"
 
