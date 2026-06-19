@@ -131,3 +131,12 @@ Or pass a custom numbers file:
 ```bash
 ./test_concurrent_votes.sh path/to/other_numbers.txt
 ```
+
+---
+
+## Before going to production
+
+- **Upgrade Twilio to a paid account** — the free trial only allows SMS to/from verified numbers
+- **Increase Lambda concurrency** — new AWS accounts default to 10 concurrent executions, which will throttle votes when 50+ members text at once. Request an increase to 100 via AWS Console → Service Quotas → AWS Lambda → Concurrent executions
+- **Set up a custom domain** — update `DOMAIN` and `HOSTED_ZONE_DOMAIN` in `deploy_custom_domain.sh`, then run it
+- **Upload the full member list** — via the Edit Members button in the dashboard
