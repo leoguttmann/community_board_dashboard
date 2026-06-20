@@ -24,7 +24,7 @@ if [ "$NEW" = true ]; then
     --profile qcb2 \
     --region us-east-1 \
     --function-name $FUNCTION_NAME \
-    --runtime python3.8 \
+    --runtime python3.12 \
     --role arn:aws:iam::487037338725:role/qcb2-dashboard-lambda-role \
     --handler $HANDLER \
     --zip-file fileb://app/$ZIP_FILE_PATH

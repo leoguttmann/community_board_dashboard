@@ -28,7 +28,7 @@ LAYER_VERSION_ARN=$(aws lambda publish-layer-version \
   --region $REGION \
   --layer-name $LAYER_NAME \
   --zip-file fileb://$ZIP_FILE \
-  --compatible-runtimes python3.8 \
+  --compatible-runtimes python3.12 \
   --query 'LayerVersionArn' \
   --output text)
 echo "Layer ARN: $LAYER_VERSION_ARN"

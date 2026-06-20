@@ -17,7 +17,7 @@ Then open http://127.0.0.1:5000/webresults
 
 ### Overview
 
-- **Lambda**: `CBFunction` — Python 3.8, handles all API routes
+- **Lambda**: `CBFunction` — Python 3.12, handles all API routes
 - **Lambda layer**: `cb-dashboard-dependencies` — third-party packages (twilio, flask, etc.)
 - **API Gateway**: HTTP API (v2), catch-all `$default` route → Lambda, stage named `default`
 - **API Gateway URL**: `https://7fklhw9ka7.execute-api.us-east-1.amazonaws.com/default`
